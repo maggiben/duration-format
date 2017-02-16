@@ -9,7 +9,8 @@
     "prepublish": "npm run compile",
     "watch": "onchange '**/*.js' -- npm run test",
     "patch-release": "npm test && npm version patch && git push --follow-tags",
-    "lint": "standard --verbose || snazzy"
+    "lint": "standard --verbose || snazzy",
+    "precommit": "npm run test"
   },
   "files": [
     "src/index.js",
