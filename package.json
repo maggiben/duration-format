@@ -4,16 +4,50 @@
   "description": "A module for parsing and converting ISO8601 duration formats",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run lint && babel-tape-runner tests/*.js tests/**/*.js",
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile",
+    "watch": "onchange '**/*.js' -- npm run test",
+    "patch-release": "npm test && npm version patch && git push --follow-tags",
+    "lint": "standard --verbose || snazzy"
   },
-  "keywords": [
-    "ISO8601"
+  "files": [
+    "src/index.js",
+    "lib/index.js"
   ],
-  "author": "Benjamin Maggi",
+  "keywords": [
+    "ISO8601",
+    "duration",
+    "parsing",
+    "formatting",
+    "time"
+  ],
+  "bugs": {
+    "url": "https://github.com/maggiben/duration-format/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:maggiben/duration-format.git"
+  },
+  "author": {
+    "name": "Benjamin Maggi",
+    "email": "benjaminmaggi@gmail.com",
+    "url": "https://github.com/maggiben"
+  },
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-preset-env": "^1.1.8",
+    "babel-tape-runner": "^2.0.1",
+    "husky": "^0.13.1",
+    "onchange": "^3.2.1",
+    "snazzy": "^6.0.0",
+    "standard": "^8.6.0",
     "tape": "^4.6.3"
+  },
+  "standard": {
+    "ignore": [
+      "examples/"
+    ]
   }
 }
