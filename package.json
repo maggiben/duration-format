@@ -1,0 +1,19 @@
+{
+  "name": "duration-format",
+  "version": "0.0.1",
+  "description": "A module for parsing and converting ISO8601 duration formats",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ISO8601"
+  ],
+  "author": "Benjamin Maggi",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-preset-env": "^1.1.8",
+    "tape": "^4.6.3"
+  }
+}
