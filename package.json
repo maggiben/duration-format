@@ -1,15 +1,17 @@
 {
   "name": "duration-format",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "A module for parsing and converting ISO8601 duration formats",
+  "comments": "NODE_ENV=test ./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/.bin/babel-tape-runner tests/*.js tests/**/*.js",
   "main": "lib/index.js",
   "scripts": {
-    "test": "npm run lint && babel-tape-runner tests/*.js tests/**/*.js",
+    "test-x": "npm run lint && babel-tape-runner tests/*.js tests/**/*.js",
+    "test": "cross-env NODE_ENV=test nyc tape tests/**/*.test.js tests/*.test.js",
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
     "watch": "onchange '**/*.js' -- npm run test",
     "patch-release": "npm test && npm version patch && git push --follow-tags",
-    "lint": "standard --verbose || snazzy",
+    "lint": "standard --verbose | snazzy",
     "precommit": "npm run test"
   },
   "files": [
@@ -35,20 +37,42 @@
     "email": "benjaminmaggi@gmail.com",
     "url": "https://github.com/maggiben"
   },
-  "license": "MIT",
-  "devDependencies": {
-    "babel-cli": "^6.23.0",
-    "babel-preset-env": "^1.1.8",
-    "babel-tape-runner": "^2.0.1",
-    "husky": "^0.13.1",
-    "onchange": "^3.2.1",
-    "snazzy": "^6.0.0",
-    "standard": "^8.6.0",
-    "tape": "^4.6.3"
-  },
   "standard": {
     "ignore": [
-      "examples/"
+      "examples/",
+      "lib/"
     ]
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "include": [
+      "src/*.js",
+      "src/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.24.1",
+    "cross-env": "^5.0.1",
+    "husky": "^0.14.3",
+    "nyc": "^11.0.3",
+    "onchange": "^3.2.1",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.2",
+    "tape": "^4.7.0"
   }
 }
