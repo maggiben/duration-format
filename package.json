@@ -5,8 +5,8 @@
   "comments": "NODE_ENV=test ./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/.bin/babel-tape-runner tests/*.js tests/**/*.js",
   "main": "lib/index.js",
   "scripts": {
-    "test-x": "npm run lint && babel-tape-runner tests/*.js tests/**/*.js",
-    "test": "cross-env NODE_ENV=test nyc tape tests/**/*.test.js tests/*.test.js",
+    "coverage": "cross-env NODE_ENV=test nyc tape tests/**/*.test.js tests/*.test.js",
+    "test": "npm run lint && npm run coverage",
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
     "watch": "onchange '**/*.js' -- npm run test",
@@ -46,14 +46,17 @@
   "nyc": {
     "check-coverage": true,
     "per-file": true,
+    "lines": 99,
+    "statements": 99,
+    "functions": 99,
+    "all": true,
     "include": [
       "src/*.js",
       "src/**/*.js"
     ],
     "reporter": [
       "lcov",
-      "text",
-      "text-summary"
+      "text"
     ],
     "require": [
       "babel-register"

@@ -18,7 +18,7 @@ const parse = durationString => {
 }
 */
 
-const unitDuration = {
+const DURATION_UNIT = {
   MS: 1,
   S: 1000,
   M: 60000,
@@ -26,6 +26,7 @@ const unitDuration = {
   D: 86400000,
   W: 604800000
 }
+const PAD_STR = '0'
 const regex = /#\{(\d*)(MS|S|M|H|D|W)\}/g
 
 const findMatchs = function (pattern) {
@@ -38,28 +39,21 @@ const findMatchs = function (pattern) {
 
 const findUnits = function (matchs) {
   // Create a unique Set
-  return [...new Set(matchs.map(match => match.unit))].sort((a, b) => (unitDuration[b] - unitDuration[a]))
+  return [...new Set(matchs.map(match => match.unit))].sort((a, b) => (DURATION_UNIT[b] - DURATION_UNIT[a]))
 }
 
 const calculateUnitValues = function (duration, units) {
   return units.reduce((accumulator, unit, index, units) => {
-    let remains = units.slice(0, index).reduce((remain, unit) => (remain -= unitDuration[unit] * accumulator[unit] || 0), duration)
-    accumulator[unit] = Math.floor(remains / unitDuration[unit])
-    return accumulator
+    const remains = units.slice(0, index).reduce((remain, unit) => (remain -= DURATION_UNIT[unit] * accumulator[unit] || 0), duration)
+    return Object.assign(accumulator, {
+      [unit]: Math.floor(remains / DURATION_UNIT[unit])
+    })
   }, {})
 }
 
-const fill = function (width = 0, value = 0, pad = '0') {
-  width -= value.toString().length
-  if (width > 0) {
-    return new Array(width + (/\./.test(value) ? 2 : 1)).join(pad) + value
-  }
-  return value
-}
-
 export default function (duration, pattern) {
-  let matchs = findMatchs(pattern)
-  let units = findUnits(matchs)
-  let unitValues = calculateUnitValues(duration, units)
-  return matchs.reduce((result, match) => (result.replace(match.str, fill(match.num, unitValues[match.unit]))), pattern)
+  const matchs = findMatchs(pattern)
+  const units = findUnits(matchs)
+  const unitValues = calculateUnitValues(duration, units)
+  return matchs.reduce((result, match) => (result.replace(match.str, unitValues[match.unit].toString().padStart(match.num, PAD_STR))), pattern)
 }
